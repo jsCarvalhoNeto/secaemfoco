@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoramento da Seca no Nordeste</title>
+
+    <style>
+        /* Títulos */
+#alertas h2, #alertas h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Container do mapa */
+.mapa-nordeste {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Estilos das cores de risco */
+.risco-baixo {
+    fill: #FFD500; /* amarelo */
+    stroke: #000;
+    stroke-width: 1;
+}
+
+.risco-moderado {
+    fill: #FF8C00; /* laranja */
+    stroke: #000;
+    stroke-width: 1;
+}
+
+.risco-alto {
+    fill: #D60000; /* vermelho */
+    stroke: #000;
+    stroke-width: 1;
+}
+
+/* Ajuste geral do mapa */
+svg {
+    width: 300px;
+    height: auto;
+}
+        h1{
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        /* Padronização de fonte para tópicos principais */
+        section p, section ul, section li {
+            font-family: Arial, Helvetica, sans-serif !important;
+            font-size: 18px !important;
+            line-height: 1.6 !important;
+        }
+
+        /* BARRA SUPERIOR */
+        header {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            width: 100%;
+            height: 90px;
+            background-color: #f5e5c3;  /* BEGE */
+            color: #333;
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .tag { padding:4px 8px; border-radius:6px; font-weight:700; display:inline-block; margin-right:8px; }
+.tag.amarelo { background:#FFD500; color:#2b2b2b; }
+.tag.laranja { background:#FF8C00; color:#2b2b2b; }
+.tag.vermelho { background:#D60000; color:#fff; }
+
+a {
+  color: #0e5ea8;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+        /* HAMBÚRGUER */
+        .menu-btn {
+            position: fixed;
+            top: 25px;
+            left: 20px;
+            width: 35px;
+            height: 30px;
+            cursor: pointer;
+            z-index: 1100;
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 100%;
+            height: 5px;
+            background-color: #333;
+            margin: 6px 0;
+            border-radius: 5px;
+        }
+
+        /* CHECKBOX DO MENU (INVISÍVEL) */
+        #menu-toggle {
+            display: none;
+        }
+
+        /* MENU LATERAL */
+        .menu {
+            position: fixed;
+            top: 0;
+            left: -260px;
+            width: 260px;
+            height: 100%;
+            background-color: #fffdf7;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            padding-top: 120px;
+            transition: 0.3s;
+        }
+
+        .menu a {
+            display: block;
+            padding: 18px;
+            font-size: 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #ece1c8;
+        }
+
+        .menu a:hover {
+            background-color: #f2e3c3;
+        }
+
+        /* ABRIR MENU QUANDO CHECKBOX TÁ ATIVO */
+        #menu-toggle:checked ~ .menu {
+            left: 0;
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        .content {
+            padding: 140px 40px 60px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #574326;
+        }
+
+        /* RODAPÉ */
+        footer {
+            width: 100%;
+            background-color: #f5e5c3;
+            padding: 25px;
+            text-align: center;
+            color: #333;
+            font-size: 18px;
+            margin-top: 40px;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+        }
+        footer {
+    background-color: #f5e6c8; /* bege claro */
+    padding: 20px;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 40px;
+}
+
+footer a {
+    color: #0056b3; /* azul elegante */
+    font-weight: bold;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+     img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+         }
+         /* Ajustes para telas pequenas (celulares) */
+@media (max-width: 768px) {
+
+    header {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px 15px;
+    }
+
+    .titulo-principal {
+        font-size: 18px;
+        text-align: center;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .hamburger {
+        position: absolute;
+        left: 15px;
+        top: 15px;
+        transform: scale(1.1);
+    }
+
+    nav {
+        width: 180px; /* menu menor */
+    }
+
+    iframe {
+        height: 350px; /* ajusta o mapa para celulares */
+    }
+}
+
+
+       
+    </style>
+</head>
+
+<body>
+
+    <!-- CHECKBOX DO MENU -->
+    <input type="checkbox" id="menu-toggle">
+
+    <!-- ÍCONE DO HAMBÚRGUER -->
+    <label for="menu-toggle" class="menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+
+    <!-- MENU LATERAL -->
+    <nav class="menu">
+        <a href="#intro">Introdução</a>
+        <a href="#seca">O que é a seca</a>
+        <a href="#prevencao">Como se prevenir</a>
+        <a href="#regioes">Regiões mais afetadas</a>
+        <a href="#alertas">Alertas climáticos</a>
+    </nav>
+
+    <!-- BARRA SUPERIOR -->
+    <header>
+        Seca em Foco: Mapeamento e Prevenção no Nordeste
+    </header>
+    
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="content">
+        <section id="intro">
+            <h2>Introdução</h2>
+            <p style="font-size: 18px; line-height: 1.6;">
+                A seca no Nordeste é um dos fenômenos climáticos mais marcantes e persistentes do Brasil. Caracterizada por longos períodos sem chuva, ela impacta diretamente a vida de milhões de pessoas que habitam essa região. Quando a estiagem se prolonga, comunidades inteiras enfrentam dificuldades no acesso à água, o que afeta atividades básicas do dia a dia, como cozinhar, limpar e garantir a hidratação das famílias.
+
+Além disso, a seca provoca prejuízos significativos na agricultura. As plantações, dependentes das chuvas, acabam sofrendo perdas, e muitos agricultores veem sua produção diminuir ou até desaparecer. Os açudes, fundamentais para o armazenamento de água, também são diretamente afetados: muitos secam ou ficam com níveis muito baixos, comprometendo o abastecimento das cidades e dos animais.
+
+A seca não é apenas um fenômeno climático; ela também está ligada a fatores ambientais, sociais e econômicos. Por isso, compreender como ela funciona é essencial. Saber o que causa a estiagem, como ela se desenvolve e quais regiões são mais vulneráveis ajuda a população a se preparar melhor e a adotar medidas de convivência com a falta de chuva.
+
+Este site foi criado com o objetivo de informar de forma simples, clara e acessível. Aqui você encontrará explicações sobre o fenômeno da seca, suas consequências e, principalmente, orientações sobre como as pessoas podem se proteger e se adaptar. Nosso propósito é oferecer conhecimento que ajude comunidades, estudantes e qualquer pessoa interessada a entender melhor essa realidade e a buscar soluções que contribuam para uma convivência mais segura e sustentável com o clima do semiárido.
+            </p>
+        </section>
+
+        <section id="seca">
+             <p style="font-size: 18px; line-height: 1.6;"></p>
+            <h2>O que é a seca no Nordeste?</h2>
+            <p>
+                A seca ocorre quando há longos períodos de pouca ou nenhuma chuva, geralmente acompanhados por temperaturas muito altas e clima seco. Quando isso acontece, o solo perde rapidamente sua umidade, a vegetação fica enfraquecida e os reservatórios de água começam a baixar. Esse processo pode durar meses ou até anos, dependendo da intensidade da estiagem e das condições climáticas da região.
+
+No Nordeste, esse fenômeno é especialmente comum porque grande parte do território faz parte do semiárido brasileiro, uma área marcada por chuvas irregulares e mal distribuídas ao longo do ano. Em muitos lugares, chove intensamente em poucos dias e depois o clima volta a ficar completamente seco. Além disso, a evaporação é muito alta por causa do calor intenso, o que faz com que a água disponível desapareça rapidamente.
+
+Devido a essas características naturais, as pessoas que vivem no Nordeste precisam conviver com ciclos frequentes de estiagem. Por isso, compreender por que a seca acontece e como ela afeta o meio ambiente e a vida das comunidades é fundamental para buscar soluções, melhorar o uso da água e encontrar formas de se adaptar ao clima da região.Temos como principais características da estiagem nordestina:
+            </p>
+            <ul>
+                <li>Chuvas irregulares</li>
+                <li>Altas temperaturas</li>
+                <li>Solo seco e ambiente quente</li>
+                <li>Rios e açudes reduzidos</li>
+            </ul>
+        </section>
+
+        <section id="prevencao">
+             <p style="font-size: 18px; line-height: 1.6;"></p>
+            <h2>Como se prevenir</h2>
+<ul>
+    <li>Economizar água diariamente</li>
+    <li>Armazenar água em caixas e cisternas</li>
+    <li>Reaproveitar água sempre que possível</li>
+    <li>Proteger plantas do sol com sombreamento</li>
+    <li>Acompanhar previsões climáticas oficiais</li>
+    <li>Utilizar sistemas de gotejamento para irrigação</li>
+    <li>Evitar desperdícios ao lavar calçadas e veículos</li>
+    <li>Consertar vazamentos assim que forem identificados</li>
+    <li>Priorizar o uso de plantas nativas e resistentes à seca</li>
+    <li>Coletar água da chuva quando possível</li>
+    <li>Manter poços, cisternas e reservatórios sempre limpos</li>
+    <li>Planejar o consumo de água da família durante períodos de estiagem</li>
+    <li>Participar de campanhas e ações comunitárias sobre uso consciente da água</li>
+    <li>Evitar queimadas, que agravem ainda mais o clima seco</li>
+    <li>Orientar crianças e jovens sobre a importância de economizar água</li>
+</ul>
+
+        </section>
+
+        <section id="regioes">
+            <h2>Regiões mais afetadas</h2>
+             <p style="font-size: 18px; line-height: 1.6;"></p>
+<ul>
+    <li>Sertão do Piauí</li>
+    <li>Interior da Bahia</li>
+    <li>Cariri (PB, PE, CE)</li>
+    <li>Seridó (RN e PB)</li>
+    <li>Sertão de Pernambuco</li>
+    <li>Vale do Jaguaribe (CE)</li>
+    <li>Sertão Central (CE)</li>
+    <li>Alto Sertão Alagoano</li>
+    <li>Sertão Sergipano</li>
+    <li>Região do Médio São Francisco</li>
+    <li>Sertão do Rio Grande do Norte</li>
+    <li>Chapada do Araripe (CE, PE, PI)</li>
+    <li>Região do Sisal (BA)</li>
+</ul>
+
+        </section>
+
+        <section id="alertas">
+            
+ 
+      <img src="imgem do projeto.png" alt="imagem do projeto.png">
+      <footer>
+    <p>Para consultar o Monitor de Secas completo, acesse: 
+        <a href="https://monitordesecas.ana.gov.br" target="_blank">
+            Monitor de Secas do Brasil
+        </a>
+    </p>
+</footer>
+    </a>
+</section>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer>
+        © 2025 — Projeto de Monitoramento Climático | Nordeste Brasileiro | by: Israelyne, Amarillys, Isabela, Brenda & Allycia
+    </footer>
+
+</body>
+</html>
